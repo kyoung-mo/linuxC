@@ -34,14 +34,13 @@ int main(int argc, char **argv)
     
     do{
         n=read(in, buf, sizeof(buf));
-
         if(n>0)
         {
             write(out, buf, n);
         }
         else if(n==0)
         {
-            fputs("Done..",stderr);
+            fputs("Done..");
             fputc('\n',stderr);
             return 0;
         }

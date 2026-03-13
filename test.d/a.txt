@@ -4,11 +4,11 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <stdlib.h>
-
 int main(int argc, char **argv)
+
 {
     int n, in, out;
-    char buf[1024];
+    char buf[200];
 
     /* 명령행 인수로 복사할 파일명이 없는 경우에 에러를 출력하고 종료한다. */
     if (argc < 3) {
@@ -18,40 +18,40 @@ int main(int argc, char **argv)
 
     /* 복사의 원본이 되는 파일을 읽기 모드로 연다. */
     if ((in = open(argv[1], O_RDONLY)) < 0) {
-        perror(argv[1]);
-        return 2;  // 음수는 2의 보수로 처리되어 컴파일 시점에 255로 저장
+//        perror(argv[1]);
+		perror("open()");
+        return 2;
     }
 
     /* 복사할 결과 파일을 쓰기 모드(새로운 파일 생성 | 기존에 파일 내용 지움)로 연다. */
-    if ((out = open(argv[2], O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP)) < 0) {
+    if ((out = open(argv[2], O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR)) < 0) {
         perror(argv[2]);
         return 3;
     }
 
     /* 원본 파일의 내용을 읽어서 복사할 파일에 쓴다. */
-    // while ((n = read(in, buf, sizeof(buf))) > 0)
-        // write(out, buf, n);
-    
-    do{
-        n=read(in, buf, sizeof(buf));
+  //  while ((n = read(in, buf, sizeof(buf))) > 0)
+    //    write(out, buf, n);
 
-        if(n>0)
-        {
-            write(out, buf, n);
-        }
-        else if(n==0)
-        {
-            fputs("Done..",stderr);
-            fputc('\n',stderr);
-            return 0;
-        }
-        else
-        {
-            perror("read()");
-            // break;
-            exit(3);
-        }
-    }while(1);
+	do {
+		n= read(in, buf, sizeof(buf));
+		if( n > 0) // error 
+		{
+				printf("size : %d\n",n);
+				write(out, buf, n);
+				//break;
+				
+		}
+		else if( n == 0 )	//EOF ,파일 끝
+		{
+			fputs("Done..",stderr);
+			fputc('\n',stderr);
+			break;
+		}
+		else{
+			write(in, buf, n);
+		}
+	}while(1);
 
     /* 열린 파일들을 닫는다. */
     close(out);
