@@ -18,7 +18,7 @@ int main(int argc, char **argv)
     /* 복사의 원본이 되는 파일을 읽기 모드로 연다. */
     if ((in = open(argv[1], O_RDONLY)) < 0) {
         perror(argv[1]);
-        return -1;
+        return -1;  // 음수는 2의 보수로 처리되어 컴파일 시점에 255로 저장
     }
 
     /* 복사할 결과 파일을 쓰기 모드(새로운 파일 생성 | 기존에 파일 내용 지움)로 연다. */
