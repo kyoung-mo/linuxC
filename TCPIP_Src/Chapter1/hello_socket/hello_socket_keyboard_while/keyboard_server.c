@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 			if(str_len < 0)
 				error_handling("read() error");  
 			else if(str_len == 0)	//상대방 소켓 종료
-			//			error_handling("client disconnected");
+				//		error_handling("client disconnected");
 					break;
 			else
 			{
