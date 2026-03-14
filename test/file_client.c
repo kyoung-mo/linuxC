@@ -12,22 +12,18 @@ int main(int argc, char* argv[])
 	struct sockaddr_in serv_addr;
 	char file[100];
     int file_len;
-    int n, in;
+    int n, in, out;
     if(argc!=4)
     {
 		printf("Usage : %s <IP> <port> <file>\n", argv[0]);
 		exit(1);
-	}
-    
-    // 복사의 원본이 되는 파일 읽기 모드로 열기
-    // 복사 원본이면 클라이언트 argv[3]
-    if((in=open(argv[3], O_RDONLY, S_IRUSR|S_IWUSR|S_IWGRP|S_IWOTH)) < 0)
+	} 
+    if((in=open(argv[3], O_RDONLY) < 0))    // fd 생성
     {
         perror(argv[3]);
         return -1;
     }
-
-	sock=socket(PF_INET, SOCK_STREAM, 0);
+	sock=socket(PF_INET, SOCK_STREAM, 0); // fd 생성
     if(sock < 0)
 		error_handling("socket() error");
     memset(&serv_addr, 0, sizeof(serv_addr));
@@ -36,27 +32,35 @@ int main(int argc, char* argv[])
 	serv_addr.sin_port=htons(atoi(argv[2]));
     if(connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0) 
 		error_handling("connect() error!");
-    file_len=read(sock, file, sizeof(file)-1);
-    if(file_len<0)
+    file_len=read(in, file, sizeof(file)-1); // in으로 교체
+    if(file_len < 0)
         error_handling("read() error!");
+
+    /* 원래 client.c 코드 -> 파일 전송 코드로 교체
+    printf("Message from server: %s \n", message);
+    close(sock);
+    return 0;
+    */
+
     do{
-        n=read(in,file,sizeof(file));
+        n=read(in,file,sizeof(file));   // argv[3]에 해당하는 fd내용 읽음
         if(n>0)
         {
-            write(sock,file,n);
+            write(sock,file,n);     // sock에 읽어온 데이터 쓰기
+            printf("size : %d\b",n);
         }
         else if(n==0)
         {
+            fputs("Done..",stderr);
+            fputc('\n',stderr);
             break;
         }
         else
             break;
     }while(1);
 
-	
-	
 	close(sock);
-	
+    close(in);
     return 0;
 }
 void error_handling(char *message)
