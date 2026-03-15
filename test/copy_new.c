@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 
 {
     int n, in, out;
-    char buf[200];
+    char buf[100];
 
     /* 명령행 인수로 복사할 파일명이 없는 경우에 에러를 출력하고 종료한다. */
     if (argc < 3) {
@@ -24,7 +24,7 @@ int main(int argc, char **argv)
     }
 
     /* 복사할 결과 파일을 쓰기 모드(새로운 파일 생성 | 기존에 파일 내용 지움)로 연다. */
-    if ((out = open(argv[2], O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR)) < 0) {
+    if ((out = open(argv[2], O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) < 0) {
         perror(argv[2]);
         return 3;
     }
