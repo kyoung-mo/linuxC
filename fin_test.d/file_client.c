@@ -45,7 +45,11 @@ int main(int argc, char* argv[])
             break;
         }
         else
-            write(in, file, n);
+        {
+            perror("read():");
+            breakl
+        }
+
     }while(1);
 
 	close(sock);

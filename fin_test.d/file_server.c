@@ -61,7 +61,8 @@ int main(int argc, char *argv[])
         else
         {
             //write(serv_sock,file,n);
-            //break;
+            perror("read()");
+            break;
         }
     }while(1);
         
