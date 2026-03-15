@@ -11,14 +11,14 @@ int main(int argc, char* argv[])
 	int sock;
 	struct sockaddr_in serv_addr;
 	char file[100];
-    int n;
-    int in;
+    int file_len;
+    int n, in;
     if(argc!=4)
     {
 		printf("Usage : %s <IP> <port> <file>\n", argv[0]);
 		exit(1);
-	}
-    if((in=open(argv[3], O_RDONLY)) < 0)    // fd 생성
+	} 
+    if((in=open(argv[3], O_RDONLY) < 0))    // fd 생성
     {
         perror(argv[3]);
         return -1;
@@ -32,14 +32,16 @@ int main(int argc, char* argv[])
 	serv_addr.sin_port=htons(atoi(argv[2]));
     if(connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0) 
 		error_handling("connect() error!");
-
+    file_len=read(sock, file, sizeof(file)-1); 
+    if(file_len < 0)
+        error_handling("read() error!");
+    
     do{
-        printf("========\n");
-        printf("in = %d, sock = %d\n",in,sock);
-        printf("========\n");
-        n=read(in,file,sizeof(file)); 
+        n=read(in,file,sizeof(file));   // argv[3]에 해당하는 fd내용 읽음
         if(n>0)
-            write(sock, file, n); 
+   {
+            write(sock,file,n);     // sock에 읽어온 데이터 쓰기
+        }
         else if(n==0)
         {
             fputs("Done..",stderr);

@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 
 {
     int n, in, out;
-    char buf[200];
+    char buf[100];
 
     /* 명령행 인수로 복사할 파일명이 없는 경우에 에러를 출력하고 종료한다. */
     if (argc < 3) {
