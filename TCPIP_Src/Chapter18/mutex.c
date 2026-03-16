@@ -36,22 +36,22 @@ int main(int argc, char *argv[])
 void * thread_inc(void * arg) 
 {
 	int i;
-	pthread_mutex_lock(&mutex);
-	for(i=0; i<50000000; i++)
-		num+=1;
-	pthread_mutex_unlock(&mutex);
-	return NULL;
+    for(i=0;i<50000000;i++){
+        pthread_mutex_lock(&mutex);
+            num+=1;
+	    pthread_mutex_unlock(&mutex);
+    } 
+    return NULL;
 }
 void * thread_des(void * arg)
 {
 	int i;
-	for(i=0; i<50000000; i++)
-	{
-		pthread_mutex_lock(&mutex);
-		num-=1;
-		pthread_mutex_unlock(&mutex);
-	}
-	return NULL;
+	for(i=0;i<50000000;i++){
+    pthread_mutex_lock(&mutex);
+      num-=1;
+	pthread_mutex_unlock(&mutex);
+    }
+    return NULL;
 }
 
 /*

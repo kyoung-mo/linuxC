@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 	}	
 
 	for(i=0; i<NUM_THREAD; i++)
-		pthread_join(thread_id[i], NULL);
+		pthread_join(thread_id[i], NULL); // 블로킹
 
 	printf("result: %lld \n", num);
 	return 0;
