@@ -74,8 +74,8 @@ int main(int argc, char *argv[])
 			 {0,-1,"","22","PASSWD"},  {0,-1,"","23","PASSWD"}, \
 			 {0,-1,"","24","PASSWD"},  {0,-1,"","25","PASSWD"}, \
 			 {0,-1,"","26","PASSWD"},  {0,-1,"","27","PASSWD"}, \
-			 {0,-1,"","28","PASSWD"},  {0,-1,"","29","PASSWD"}, \
-			 {0,-1,"","30","PASSWD"},  {0,-1,"","31","PASSWD"}, \
+			 {0,-1,"","KYM_STM","PASSWD"},  {0,-1,"","KYM_LDP","PASSWD"}, \
+			 {0,-1,"","KYM_LIN","PASSWD"},  {0,-1,"","KYM_ARD","PASSWD"}, \
 			 {0,-1,"","32","PASSWD"}};
 
 	if(argc != 2) {
