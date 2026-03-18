@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 	void * thread_return;
 	int ret;
 	struct sockaddr_rc addr = { 0 };
-  	char dest[18] = "98:DA:60:09:9B:BC";	//iot00
+  	char dest[18] = "98:DA:60:08:1F:6B";	//iot05
 	char msg[BUF_SIZE];
 
 	if(argc != 4) {
@@ -106,6 +106,7 @@ void * send_msg(void * arg)  //bluetooth --> server
 	FD_ZERO(&initset);
 	FD_SET(dev_fd->sockfd, &initset);
 	FD_SET(dev_fd->btfd, &initset);
+    FD_SET(STDIN_FILENO, &initset);
 
 	//	fputs("Input a message! [ID]msg (Default ID:ALLMSG)\n",stdout);
 	while(1) {
@@ -114,7 +115,8 @@ void * send_msg(void * arg)  //bluetooth --> server
 		tv.tv_sec = 1;
 		tv.tv_usec = 0;
 		newset = initset;
-		ret = select(dev_fd->btfd + 1, &newset, NULL, NULL, &tv);
+		int maxfd = dev_fd->btfd > STDIN_FILENO ? dev_fd->btfd : STDIN_FILENO;
+        ret = select(maxfd + 1, &newset, NULL, NULL, &tv);
 		//        if(FD_ISSET(STDIN_FILENO, &newset))
 		if(FD_ISSET(dev_fd->btfd, &newset))
 		{
