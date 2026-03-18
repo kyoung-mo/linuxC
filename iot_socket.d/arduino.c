@@ -5,7 +5,6 @@ http://www.kccistc.net/
 작성자 : AIoT 임베디드 KSH
 */
 #define DEBUG
-#define DEBUG_WIFI
 #define AP_SSID "KCCI603"
 #define AP_PASS "@KCCI603!"
 #define SERVER_NAME "10.10.16.35"
@@ -42,6 +41,7 @@ float temp;
 SoftwareSerial wifiSerial(WIFIRX, WIFITX);
 WiFiEspClient client;
 DHT dht(DHT_PIN, DHTTYPE);
+char recvID[10]="KYM_SQL";
 
 void setup() {
   // put your setup code here, to run once:
@@ -61,9 +61,9 @@ void loop() {
   if (client.available()) {
     socketEvent();
   }
-  if (timerIsrFlag) {
+  if (timerIsrFlag) { //1초에 한번씩만 실행
     timerIsrFlag = false;
-    if (!(secCount % 5)) {
+    if (!(secCount % 5)) { //5초에 한번씩만 실행
       if (!client.connected()) {
         server_Connect();
       }
@@ -86,7 +86,8 @@ void loop() {
       char humiStr[5];
       dtostrf(humi, 4, 1, humiStr);  //50.0   4:전체자리수,1:소수이하 자리수
       dtostrf(temp, 4, 1, tempStr);  //25.1
-      sprintf(sendBuf,"[%s]SENSOR@%d@%s@%s\n","KSH_SQL",cds,tempStr,humiStr);   
+//      sprintf(sendBuf,"[%s]SENSOR@%d@%s@%s\n","KSH_SQL",cds,tempStr,humiStr);   
+      sprintf(sendBuf,"[%s]SENSOR@%d@%s@%s\n",recvID,cds,tempStr,humiStr);   
   //      Serial.println(sendBuf);
       client.write(sendBuf, strlen(sendBuf));
       client.flush();
@@ -130,14 +131,16 @@ void socketEvent() {
     } else if (!strcmp(pArray[2], "OFF")) {
       digitalWrite(LED_BUILTIN_PIN, LOW);
     }
-    sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+    //sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+    sprintf(sendBuf, "[%s]SETDB@%s@%s@%s\n", "KYM_SQL", pArray[1], pArray[2], pArray[0]);
   } else if (!strcmp(pArray[1], "LAMP")) {
     if (!strcmp(pArray[2], "ON")) {
       digitalWrite(LED_TEST_PIN, HIGH);
     } else if (!strcmp(pArray[2], "OFF")) {
       digitalWrite(LED_TEST_PIN, LOW);
     }
-    sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+    //sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+    sprintf(sendBuf, "[%s]SETDB@%s@%s@%s\n", "KYM_SQL", pArray[1], pArray[2], pArray[0]);
   } else if (!strcmp(pArray[1], "GETSTATE")) {
     if (!strcmp(pArray[2], "DEV")) {
       sprintf(sendBuf, "[%s]DEV@%s@%s\n", pArray[0], digitalRead(LED_BUILTIN_PIN) ? "ON" : "OFF", digitalRead(LED_TEST_PIN) ? "ON" : "OFF");
@@ -145,12 +148,13 @@ void socketEvent() {
   }
   else if (!strcmp(pArray[1], "MOTOR")) {
     int pwm = atoi(pArray[2]);
-    pwm = map(pwm,0,100,0,255);AAAAAAAAAAAA
+    pwm = map(pwm,0,100,0,255);
     analogWrite(MOTOR_PIN, pwm);
     sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
   }
   else if (!strcmp(pArray[1], "GETSENSOR")) {
     sensorTime = atoi(pArray[2]);
+    strcpy(recvID, pArray[0]);
     sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
   }
   client.write(sendBuf, strlen(sendBuf));

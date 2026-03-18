@@ -126,7 +126,7 @@ void * recv_msg(void * arg)
 		}
 		name_msg[str_len] = 0;
 		fputs(name_msg, stdout);
-
+/* 
 		   	pToken = strtok(name_msg,"[@]");
 			i = 0;
 			while(pToken != NULL)
@@ -139,7 +139,8 @@ void * recv_msg(void * arg)
 
 		printf("id:%s, msg:%s,%s,%s,%s\n",pArray[0],pArray[1],pArray[2],pArray[3],pArray[4]);
 		printf("id:%s, msg:%s\n",pArray[0],pArray[1]);
-		
+*/		
+
 	}
 }
 

@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 			 {0,-1,"","26","PASSWD"},  {0,-1,"","27","PASSWD"}, \
 			 {0,-1,"","KYM_STM","PASSWD"},  {0,-1,"","KYM_LDP","PASSWD"}, \
 			 {0,-1,"","KYM_LIN","PASSWD"},  {0,-1,"","KYM_ARD","PASSWD"}, \
-			 {0,-1,"","32","PASSWD"}};
+			 {0,-1,"","KYM_SQL","PASSWD"}};
 
 	if(argc != 2) {
 		printf("Usage : %s <port>\n",argv[0]);
@@ -200,7 +200,14 @@ void * clnt_connection(void *arg)
 	while(1)
 	{
 		memset(msg,0x0,sizeof(msg));
-		str_len = read(client_info->fd, msg, sizeof(msg)-1); 
+		str_len = 0;
+		char ch;
+		while(str_len < (int)sizeof(msg)-1) {
+			int n = read(client_info->fd, &ch, 1);
+			if(n <= 0) { str_len = n; break; }
+			msg[str_len++] = ch;
+			if(ch == '\n') break;
+		}
 		if(str_len <= 0)
 			break;
 
