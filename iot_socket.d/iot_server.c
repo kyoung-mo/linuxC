@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 			 {0,-1,"","KHJ_LDP","PASSWD"},  {0,-1,"","KHJ_LIN","PASSWD"}, \
 			 {0,-1,"","KHJ_ARD","PASSWD"},  {0,-1,"","KHJ_SQL","PASSWD"}, \
 			 {0,-1,"","24","PASSWD"},  {0,-1,"","25","PASSWD"}, \
-			 {0,-1,"","26","PASSWD"},  {0,-1,"","27","PASSWD"}, \
+			 {0,-1,"","26","PASSWD"},  {0,-1,"","KYM_QT","PASSWD"}, \
 			 {0,-1,"","KYM_STM","PASSWD"},  {0,-1,"","KYM_LDP","PASSWD"}, \
 			 {0,-1,"","KYM_LIN","PASSWD"},  {0,-1,"","KYM_ARD","PASSWD"}, \
 			 {0,-1,"","KYM_SQL","PASSWD"}};
